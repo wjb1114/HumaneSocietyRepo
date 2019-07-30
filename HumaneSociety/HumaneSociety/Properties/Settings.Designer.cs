@@ -12,7 +12,7 @@ namespace HumaneSociety.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -65,6 +65,17 @@ namespace HumaneSociety.Properties {
         public string HumaneSocietyConnectionString2 {
             get {
                 return ((string)(this["HumaneSocietyConnectionString2"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=OWNER1\\SQLEXPRESS;Initial Catalog=HumaneSociety;Integrated Security=T" +
+            "rue;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False")]
+        public string HumaneSocietyConnectionString3 {
+            get {
+                return ((string)(this["HumaneSocietyConnectionString3"]));
             }
         }
     }
