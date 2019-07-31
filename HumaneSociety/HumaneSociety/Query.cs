@@ -167,7 +167,49 @@ namespace HumaneSociety
         // TODO: Allow any of the CRUD operations to occur here
         internal static void RunEmployeeQueries(Employee employee, string crudOperation)
         {
-            throw new NotImplementedException();
+            switch(crudOperation)
+            {
+                case "create":
+                    db.Employees.InsertOnSubmit(employee);
+                    break;
+                case "read":
+                    Employee foundEmployeeRead = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).FirstOrDefault();
+                    string output = "";
+                    output += "Name: " + foundEmployeeRead.FirstName + " " + foundEmployeeRead.LastName + "\n";
+                    output += "Employee Number: " + foundEmployeeRead.EmployeeNumber + "\n";
+                    output += "Email: " + foundEmployeeRead.Email + "\n";
+                    output += "Username: " + foundEmployeeRead.UserName + "\n";
+                    output += "Password: " + foundEmployeeRead.Password;
+                    UserInterface.DisplayUserOptions(output);
+                    Console.ReadKey();
+                    break;
+                case "update":
+                    Employee foundEmployeeUpdate = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).FirstOrDefault();
+
+                    employee.FirstName = UserInterface.GetStringData("new first name", "the employee's");
+                    employee.LastName = UserInterface.GetStringData("new last name", "the employee's");
+                    employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("new employee number", "the employee's"));
+                    employee.Email = UserInterface.GetStringData("new email", "the employee's");
+                    employee.UserName = UserInterface.GetStringData("new username", "the employee's");
+                    employee.Password = UserInterface.GetStringData("new password", "the employee's");
+                    
+                    foundEmployeeUpdate.FirstName = employee.FirstName;
+                    foundEmployeeUpdate.LastName = employee.LastName;
+                    foundEmployeeUpdate.Email = employee.Email;
+                    foundEmployeeUpdate.UserName = employee.UserName;
+                    foundEmployeeUpdate.Password = employee.Password;
+                    break;
+                case "delete":
+                    Employee FoundEmployeeDelete = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).FirstOrDefault();
+                    db.Employees.DeleteOnSubmit(FoundEmployeeDelete);
+                    var changedAnimals = db.Animals.Where(a => a.EmployeeId == FoundEmployeeDelete.EmployeeId);
+                    foreach (Animal animal in changedAnimals)
+                    {
+                        animal.EmployeeId = null;
+                    }
+                    break;
+            }
+            db.SubmitChanges();
         }
 
         // TODO: Animal CRUD Operations
@@ -220,6 +262,11 @@ namespace HumaneSociety
         internal static void RemoveAnimal(Animal animal)
         {
             db.Animals.DeleteOnSubmit(animal);
+            var rooms = db.Rooms.Where(a => a.AnimalId == animal.AnimalId);
+            foreach (Room room in rooms)
+            {
+                room.AnimalId = null;
+            }
             db.SubmitChanges();
         }
         
@@ -263,7 +310,7 @@ namespace HumaneSociety
         }
 
         // TODO: Misc Animal Things
-        internal static Animal GetCategoryId(string categoryName)
+        internal static int GetCategoryId(string categoryName)
         {
             var categoryConnectId = db.Categories.Where(e => e.Name == categoryName).Single();
             var categoryFromDb = db.Animals.Where(e => e.CategoryId == categoryConnectId.CategoryId).FirstOrDefault();
@@ -273,7 +320,7 @@ namespace HumaneSociety
             }
             else
             {
-                return categoryFromDb;
+                return categoryFromDb.AnimalId;
             }
         }
 
