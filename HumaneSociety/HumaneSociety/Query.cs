@@ -200,7 +200,7 @@ namespace HumaneSociety
                     foundEmployeeUpdate.Password = employee.Password;
                     break;
                 case "delete":
-                    Employee FoundEmployeeDelete = db.Employees.Where(e => e.EmployeeNumber == db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Where(e => e.Email == employee.Email).Where(e => e.FirstName == employee.FirstName).Where(e => e.LastName == employee.LastName).FirstOrDefault();
+                    Employee FoundEmployeeDelete = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Where(e => e.Email == employee.Email).Where(e => e.FirstName == employee.FirstName).Where(e => e.LastName == employee.LastName).FirstOrDefault();
                     db.Employees.DeleteOnSubmit(FoundEmployeeDelete);
                     var changedAnimals = db.Animals.Where(a => a.EmployeeId == FoundEmployeeDelete.EmployeeId);
                     foreach (Animal animal in changedAnimals)
