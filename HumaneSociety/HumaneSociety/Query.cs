@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Linq;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -184,24 +185,35 @@ namespace HumaneSociety
 
         internal static void UpdateAnimal(int animalId, Dictionary<int, string> updates)
         {
-            /*  1: category
-                2: name
-                3: age
-                4: demeanor
-                5: kidFriendly
-                6: petFriendly
-                7: weight
-                8: ID 
-                
-                Testing only category, TODO: add other attriute modification*/
             Animal foundAnimal = GetAnimalByID(animalId);
             if (updates.ContainsKey(1))
             {
-                foundAnimal.Category.Name = updates[1];
-                var newId = db.Categories.Where(c => c.Name == updates[1]).FirstOrDefault();
-                foundAnimal.Category.CategoryId = newId.CategoryId;
+                foundAnimal.Category = db.Categories.Where(c => c.Name == updates[1]).FirstOrDefault();
             }
-
+            if (updates.ContainsKey(2))
+            {
+                foundAnimal.Name = updates[2];
+            }
+            if (updates.ContainsKey(3))
+            {
+                foundAnimal.Age = Convert.ToInt32(updates[3]);
+            }
+            if (updates.ContainsKey(4))
+            {
+                foundAnimal.Demeanor = updates[4];
+            }
+            if (updates.ContainsKey(5))
+            {
+                foundAnimal.KidFriendly = Convert.ToBoolean(updates[5]);
+            }
+            if (updates.ContainsKey(6))
+            {
+                foundAnimal.PetFriendly = Convert.ToBoolean(updates[6]);
+            }
+            if (updates.ContainsKey(7))
+            {
+                foundAnimal.Weight = Convert.ToInt32(updates[7]);
+            }
             db.SubmitChanges();
         }
 
@@ -214,9 +226,42 @@ namespace HumaneSociety
         // TODO: Animal Multi-Trait Search
         internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
         {
-            throw new NotImplementedException();
+            IQueryable<Animal> animals = db.Animals.Select(a => a);
+            if (updates.ContainsKey(1))
+            {
+                animals = animals.Where(a => a.Category.Name == updates[1]);
+            }
+            if (updates.ContainsKey(2))
+            {
+                animals = animals.Where(a => a.Name == updates[2]);
+            }
+            if (updates.ContainsKey(3))
+            {
+                animals = animals.Where(a => a.Age == Convert.ToInt32(updates[3]));
+            }
+            if (updates.ContainsKey(4))
+            {
+                animals = animals.Where(a => a.Demeanor == updates[4]);
+            }
+            if (updates.ContainsKey(5))
+            {
+                animals = animals.Where(a => a.KidFriendly == Convert.ToBoolean(updates[5]));
+            }
+            if (updates.ContainsKey(6))
+            {
+                animals = animals.Where(a => a.PetFriendly == Convert.ToBoolean(updates[6]));
+            }
+            if (updates.ContainsKey(7))
+            {
+                animals = animals.Where(a => a.Weight == Convert.ToInt32(updates[7]));
+            }
+            if (updates.ContainsKey(8))
+            {
+                animals = animals.Where(a => a.AnimalId == Convert.ToInt32(updates[8]));
+            }
+            return animals;
         }
-         
+
         // TODO: Misc Animal Things
         internal static int GetCategoryId(string categoryName)
         {
