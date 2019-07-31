@@ -354,22 +354,51 @@ namespace HumaneSociety
         // TODO: Adoption CRUD Operations
         internal static void Adopt(Animal animal, Client client)
         {
-            throw new NotImplementedException();
+            Adoption adoption = new Adoption();
+            adoption.ClientId = client.ClientId;
+            adoption.AnimalId = animal.AnimalId;
+            adoption.ApprovalStatus = "Pending";
+            adoption.AdoptionFee = 75;
+            adoption.PaymentCollected = true;
+            db.Adoptions.InsertOnSubmit(adoption);
+            db.SubmitChanges();
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
         {
-            throw new NotImplementedException();
+            IQueryable<Adoption> adoptions = db.Adoptions.Where(a => a.ApprovalStatus == "Pending");
+            return adoptions;
         }
 
         internal static void UpdateAdoption(bool isAdopted, Adoption adoption)
         {
-            throw new NotImplementedException();
+            if (adoption.PaymentCollected == true)
+            {
+                if (isAdopted == true)
+                {
+                    adoption.ApprovalStatus = "Approved";
+                    Animal adoptedAnimal = db.Animals.Where(a => a.AnimalId == adoption.AnimalId).FirstOrDefault();
+                    RemoveAdoption(adoption.AnimalId, adoption.ClientId);
+                    RemoveAnimal(adoptedAnimal);
+                }
+                else
+                {
+                    adoption.ApprovalStatus = "Denied";
+                    RemoveAdoption(adoption.AnimalId, adoption.ClientId);
+                }
+                db.SubmitChanges();
+            }
+            else
+            {
+                UserInterface.DisplayUserOptions("Client has not paid fees.");
+            }
         }
 
         internal static void RemoveAdoption(int animalId, int clientId)
         {
-            throw new NotImplementedException();
+            var adoption = db.Adoptions.Where(a => a.AnimalId == animalId).Where(a => a.ClientId == clientId).FirstOrDefault();
+            db.Adoptions.DeleteOnSubmit(adoption);
+            db.SubmitChanges();
         }
 
         // TODO: Shots Stuff
