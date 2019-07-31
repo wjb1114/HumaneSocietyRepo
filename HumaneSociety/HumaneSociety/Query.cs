@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Linq;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,7 +82,7 @@ namespace HumaneSociety
             {
                 clientFromDb = db.Clients.Where(c => c.ClientId == clientWithUpdates.ClientId).Single();
             }
-            catch(InvalidOperationException e)
+            catch(InvalidOperationException)
             {
                 Console.WriteLine("No clients have a ClientId that matches the Client passed in.");
                 Console.WriteLine("No update have been made.");
@@ -413,6 +414,91 @@ namespace HumaneSociety
             var typeOfShot = db.Shots.Where(e => e.Name == shotName).FirstOrDefault();
             UpdateAnimalShot.ShotId = typeOfShot.ShotId;
 
+        }
+
+        internal static void ImportAnimalDataFromCSV(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                string line;
+
+                StreamReader file = new StreamReader(filePath);
+                while ((line = file.ReadLine()) != null)
+                {
+                    string[] currentLineItems = line.Split(',');
+                    // name, weight, age, demeanor, kidfriendly, petfriendly, gender, adoptionstatus, categoryid, dietplanid, employeeid
+                    Animal currentAnimal = new Animal();
+                    currentAnimal.Name = currentLineItems[0].Replace("\"", "") ?? null;
+                    if(currentLineItems[1].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[1].Replace("\"", "")))
+                    {
+                        currentAnimal.Weight = null;
+                    }
+                    else
+                    {
+                        currentAnimal.Weight = Convert.ToInt32(currentLineItems[1]);
+                    }
+                    if (currentLineItems[2].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[2].Replace("\"", "")))
+                    {
+                        currentAnimal.Age = null;
+                    }
+                    else
+                    {
+                        currentAnimal.Age = Convert.ToInt32(currentLineItems[2]);
+                    }
+                    currentAnimal.Demeanor = currentLineItems[3].Replace("\"", "") ?? null;
+                    if (currentLineItems[4].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[4].Replace("\"", "")))
+                    {
+                        currentAnimal.KidFriendly = null;
+                    }
+                    else
+                    {
+                        currentAnimal.KidFriendly = (Convert.ToInt32(currentLineItems[4]) != 0);
+                    }
+                    if (currentLineItems[5].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[5].Replace("\"", "")))
+                    {
+                        currentAnimal.PetFriendly = null;
+                    }
+                    else
+                    {
+                        currentAnimal.PetFriendly = (Convert.ToInt32(currentLineItems[5]) != 0);
+                    }
+                    currentAnimal.Gender = currentLineItems[6].Replace("\"", "") ?? null;
+                    currentAnimal.AdoptionStatus = currentLineItems[7].Replace("\"", "") ?? null;
+                    if (currentLineItems[8].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[8].Replace("\"", "")))
+                    {
+                        currentAnimal.CategoryId = null;
+                    }
+                    else
+                    {
+                        currentAnimal.CategoryId = Convert.ToInt32(currentLineItems[8]);
+                    }
+                    if (currentLineItems[9].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[9].Replace("\"", "")))
+                    {
+                        currentAnimal.DietPlanId = null;
+                    }
+                    else
+                    {
+                        currentAnimal.DietPlanId = Convert.ToInt32(currentLineItems[9]);
+                    }
+                    if (currentLineItems[10].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[10].Replace("\"", "")))
+                    {
+                        currentAnimal.EmployeeId = null;
+                    }
+                    else
+                    {
+                        currentAnimal.EmployeeId = Convert.ToInt32(currentLineItems[10]);
+                    }
+                    AddAnimal(currentAnimal);
+                }
+
+                file.Close();
+                Console.WriteLine("Animals have been imported.");
+            }
+            else
+            {
+                Console.WriteLine("File does not exist.");
+            }
+            Console.ReadKey();
         }
     }
 }
