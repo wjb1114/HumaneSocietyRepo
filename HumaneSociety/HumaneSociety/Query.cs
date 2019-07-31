@@ -263,19 +263,45 @@ namespace HumaneSociety
         }
 
         // TODO: Misc Animal Things
-        internal static int GetCategoryId(string categoryName)
+        internal static Animal GetCategoryId(string categoryName)
         {
-            throw new NotImplementedException();
+            var categoryConnectId = db.Categories.Where(e => e.Name == categoryName).Single();
+            var categoryFromDb = db.Animals.Where(e => e.CategoryId == categoryConnectId.CategoryId).FirstOrDefault();
+            if (categoryFromDb == null)
+            {
+                throw new NullReferenceException();
+            }
+            else
+            {
+                return categoryFromDb;
+            }
         }
-        
+
         internal static Room GetRoom(int animalId)
         {
-            throw new NotImplementedException();
+            var roomConnectId = db.Rooms.Where(e => e.AnimalId == animalId).Single();
+            if (roomConnectId == null)
+            {
+                throw new NullReferenceException();
+            }
+            else
+            {
+                return roomConnectId;
+            }
         }
-        
+
         internal static int GetDietPlanId(string dietPlanName)
         {
-            throw new NotImplementedException();
+            var dietPlanConnectId = db.DietPlans.Where(e => e.Name == dietPlanName).Single();
+            if (dietPlanConnectId == null)
+            {
+                throw new NullReferenceException();
+            }
+            else
+            {
+
+                return dietPlanConnectId.DietPlanId;
+            }
         }
 
         // TODO: Adoption CRUD Operations
