@@ -17,11 +17,11 @@ INSERT INTO DietPlans VALUES('Pescatarian','Pure Fish', 4);
 INSERT INTO DietPlans VALUES('Keto','No carbohydrates', 3);
 INSERT INTO DietPlans VALUES('Vegan','All plant based produce', 6);
 
-INSERT INTO Employees VALUES('John','Smith','JSmith01', 'HeresJohnny');
-INSERT INTO Employees VALUES('Martha','May','MarthaMay', 'MayistheWay');
-INSERT INTO Employees VALUES('Tim','Kook','TKAllDay', 'CantStopTKNoWay');
-INSERT INTO Employees VALUES('Sarah','Johnson','SJohnson', 'SJ212121');
-INSERT INTO Employees VALUES('Mike','Fiers','MikeF', 'HikewithMike');
+INSERT INTO Employees VALUES('John','Smith','JSmith01', 'HeresJohnny', 12345, 'JSmith01@gmail.com');
+INSERT INTO Employees VALUES('Martha','May','MarthaMay', 'MayistheWay', 23456, 'MarthaMayWay@gmail.com');
+INSERT INTO Employees VALUES('Tim','Kook','TKAllDay', 'CantStopTKNoWay', 23457, 'TKooksNoCrook@gmal.com');
+INSERT INTO Employees VALUES('Sarah','Johnson','SJohnson', 'SJ212121', 23458, 'SJAllDay@hotmal.com');
+INSERT INTO Employees VALUES('Mike','Fiers','MikeF', 'HikewithMike',10000, 'MikeWithABike@bing.com');
 
 INSERT INTO Rooms VALUES(1,1);
 INSERT INTO Rooms VALUES(2,1);
@@ -45,7 +45,6 @@ INSERT INTO Addresses VALUES ('1818 Donald Duck Avenue','Disney',2, 31316);
 INSERT INTO Addresses VALUES ('1969 GoToTheMoon Road','Houston',3, 21334);
 INSERT INTO Addresses VALUES ('1688 N Franklin Place','Milwaukee',4, 53202);
 INSERT INTO Addresses VALUES ('1889 Lombardi Avenue','Green Bay',5, 51001);
-
 
 
 
