@@ -167,48 +167,65 @@ namespace HumaneSociety
             switch(crudOperation)
             {
                 case "create":
-                    db.Employees.InsertOnSubmit(employee);
+                    RunEmployeeQueriesAdd(employee);
                     break;
                 case "read":
-                    Employee foundEmployeeRead = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Where(e => e.Email == employee.Email).Where(e => e.FirstName == employee.FirstName).Where(e => e.LastName == employee.LastName).FirstOrDefault();
-                    string output = "";
-                    output += "Name: " + foundEmployeeRead.FirstName + " " + foundEmployeeRead.LastName + "\n";
-                    output += "Employee Number: " + foundEmployeeRead.EmployeeNumber + "\n";
-                    output += "Email: " + foundEmployeeRead.Email + "\n";
-                    output += "Username: " + foundEmployeeRead.UserName + "\n";
-                    output += "Password: " + foundEmployeeRead.Password;
-                    UserInterface.DisplayUserOptions(output);
-                    Console.ReadKey();
+                    RunEmployeeQueriesRead(employee);
                     break;
                 case "update":
-                    Employee foundEmployeeUpdate = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Where(e => e.Email == employee.Email).Where(e => e.FirstName == employee.FirstName).Where(e => e.LastName == employee.LastName).FirstOrDefault();
-
-                    employee.FirstName = UserInterface.GetStringData("new first name", "the employee's");
-                    employee.LastName = UserInterface.GetStringData("new last name", "the employee's");
-                    employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("new employee number", "the employee's"));
-                    employee.Email = UserInterface.GetStringData("new email", "the employee's");
-                    employee.UserName = UserInterface.GetStringData("new username", "the employee's");
-                    employee.Password = UserInterface.GetStringData("new password", "the employee's");
-                    
-                    foundEmployeeUpdate.FirstName = employee.FirstName;
-                    foundEmployeeUpdate.LastName = employee.LastName;
-                    foundEmployeeUpdate.Email = employee.Email;
-                    foundEmployeeUpdate.UserName = employee.UserName;
-                    foundEmployeeUpdate.Password = employee.Password;
+                    RunEmployeeQueriesUpdate(employee);
                     break;
                 case "delete":
-                    Employee FoundEmployeeDelete = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Where(e => e.Email == employee.Email).Where(e => e.FirstName == employee.FirstName).Where(e => e.LastName == employee.LastName).FirstOrDefault();
-                    db.Employees.DeleteOnSubmit(FoundEmployeeDelete);
-                    var changedAnimals = db.Animals.Where(a => a.EmployeeId == FoundEmployeeDelete.EmployeeId);
-                    foreach (Animal animal in changedAnimals)
-                    {
-                        animal.EmployeeId = null;
-                    }
+                    RunEmployeeQueriesDelete(employee);
                     break;
             }
             db.SubmitChanges();
         }
-        internal static void AddAnimal(Animal animal)
+        internal static void RunEmployeeQueriesAdd(Employee employee)
+        {
+            db.Employees.InsertOnSubmit(employee);
+        }
+        internal static void RunEmployeeQueriesRead(Employee employee)
+        {
+            Employee foundEmployeeRead = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Where(e => e.Email == employee.Email).Where(e => e.FirstName == employee.FirstName).Where(e => e.LastName == employee.LastName).FirstOrDefault();
+            string output = "";
+            output += "Name: " + foundEmployeeRead.FirstName + " " + foundEmployeeRead.LastName + "\n";
+            output += "Employee Number: " + foundEmployeeRead.EmployeeNumber + "\n";
+            output += "Email: " + foundEmployeeRead.Email + "\n";
+            output += "Username: " + foundEmployeeRead.UserName + "\n";
+            output += "Password: " + foundEmployeeRead.Password;
+            UserInterface.DisplayUserOptions(output);
+            Console.ReadKey();
+        }
+        internal static void RunEmployeeQueriesUpdate(Employee employee)
+        {
+            Employee foundEmployeeUpdate = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Where(e => e.Email == employee.Email).Where(e => e.FirstName == employee.FirstName).Where(e => e.LastName == employee.LastName).FirstOrDefault();
+
+            employee.FirstName = UserInterface.GetStringData("new first name", "the employee's");
+            employee.LastName = UserInterface.GetStringData("new last name", "the employee's");
+            employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("new employee number", "the employee's"));
+            employee.Email = UserInterface.GetStringData("new email", "the employee's");
+            employee.UserName = UserInterface.GetStringData("new username", "the employee's");
+            employee.Password = UserInterface.GetStringData("new password", "the employee's");
+
+            foundEmployeeUpdate.FirstName = employee.FirstName;
+            foundEmployeeUpdate.LastName = employee.LastName;
+            foundEmployeeUpdate.Email = employee.Email;
+            foundEmployeeUpdate.UserName = employee.UserName;
+            foundEmployeeUpdate.Password = employee.Password;
+        }
+        internal static void RunEmployeeQueriesDelete(Employee employee)
+        {
+            Employee FoundEmployeeDelete = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Where(e => e.Email == employee.Email).Where(e => e.FirstName == employee.FirstName).Where(e => e.LastName == employee.LastName).FirstOrDefault();
+            db.Employees.DeleteOnSubmit(FoundEmployeeDelete);
+            var changedAnimals = db.Animals.Where(a => a.EmployeeId == FoundEmployeeDelete.EmployeeId);
+            foreach (Animal animal in changedAnimals)
+            {
+                animal.EmployeeId = null;
+            }
+        }
+
+    internal static void AddAnimal(Animal animal)
         {
             db.Animals.InsertOnSubmit(animal);
             db.SubmitChanges();
