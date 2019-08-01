@@ -577,18 +577,20 @@ namespace HumaneSociety
                         data[i] = data[i].Replace("\"", "").Trim();
                     }
 
-                    Animal currentAnimal = new Animal();
-                    currentAnimal.Name = data[0] ?? null;
-                    currentAnimal.Weight = data[1].ToNullableInt() ?? null;
-                    currentAnimal.Age = data[2].ToNullableInt() ?? null;
-                    currentAnimal.Demeanor = data[3] ?? null;
-                    currentAnimal.KidFriendly = data[4].ToNullableBool() ?? null;
-                    currentAnimal.PetFriendly = data[5].ToNullableBool() ?? null;
-                    currentAnimal.Gender = data[6] ?? null;
-                    currentAnimal.AdoptionStatus = data[7] ?? null;
-                    currentAnimal.CategoryId = data[8].ToNullableInt() ?? null;
-                    currentAnimal.DietPlanId = data[9].ToNullableInt() ?? null;
-                    currentAnimal.EmployeeId = data[10].ToNullableInt() ?? null;
+                    Animal currentAnimal = new Animal
+                    {
+                        Name = data[0] ?? null,
+                        Weight = data[1].ToNullableInt() ?? null,
+                        Age = data[2].ToNullableInt() ?? null,
+                        Demeanor = data[3] ?? null,
+                        KidFriendly = data[4].ToNullableBool() ?? null,
+                        PetFriendly = data[5].ToNullableBool() ?? null,
+                        Gender = data[6] ?? null,
+                        AdoptionStatus = data[7] ?? null,
+                        CategoryId = data[8].ToNullableInt() ?? null,
+                        DietPlanId = data[9].ToNullableInt() ?? null,
+                        EmployeeId = data[10].ToNullableInt() ?? null
+                    };
                     AddAnimal(currentAnimal);
                 }
                 Console.WriteLine("Animals have been imported.");
