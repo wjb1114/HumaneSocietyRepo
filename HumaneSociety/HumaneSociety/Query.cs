@@ -330,7 +330,15 @@ namespace HumaneSociety
             }
             if (updates.ContainsKey(3))
             {
-                animals = animals.Where(a => a.Age == Convert.ToInt32(updates[3]));
+                try
+                {
+                    int value = Convert.ToInt32(updates[3]);
+                    animals = animals.Where(a => a.Age == value);
+                }
+                catch
+                {
+                    Console.WriteLine("Input is invalid. Ignoring search criteria \'Age\'");
+                }
             }
             if (updates.ContainsKey(4))
             {
@@ -338,19 +346,52 @@ namespace HumaneSociety
             }
             if (updates.ContainsKey(5))
             {
-                animals = animals.Where(a => a.KidFriendly == Convert.ToBoolean(updates[5]));
+                try
+                {
+                    bool value = Convert.ToBoolean(updates[5]);
+                    animals = animals.Where(a => a.KidFriendly == value);
+                }
+                catch
+                {
+                    Console.WriteLine("Input is invalid. Ignoring search criteria \'Kid Friendly\'");
+                }
+                
             }
             if (updates.ContainsKey(6))
             {
-                animals = animals.Where(a => a.PetFriendly == Convert.ToBoolean(updates[6]));
+                try
+                {
+                    bool value = Convert.ToBoolean(updates[6]);
+                    animals = animals.Where(a => a.PetFriendly == value);
+                }
+                catch
+                {
+                    Console.WriteLine("Input is invalid. Ignoring search criteria \'Pet Friendly\'");
+                }
             }
             if (updates.ContainsKey(7))
             {
-                animals = animals.Where(a => a.Weight == Convert.ToInt32(updates[7]));
+                try
+                {
+                    int value = Convert.ToInt32(updates[7]);
+                    animals = animals.Where(a => a.Weight == value);
+                }
+                catch
+                {
+                    Console.WriteLine("Input is invalid. Ignoring search criteria \'Weight\'");
+                }
             }
             if (updates.ContainsKey(8))
             {
-                animals = animals.Where(a => a.AnimalId == Convert.ToInt32(updates[8]));
+                try
+                {
+                    int value = Convert.ToInt32(updates[8]);
+                    animals = animals.Where(a => a.AnimalId == value);
+                }
+                catch
+                {
+                    Console.WriteLine("Input is invalid. Ignoring search criteria \'Animal ID\'");
+                }
             }
             return animals;
         }
