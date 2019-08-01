@@ -162,10 +162,6 @@ namespace HumaneSociety
             return employeeWithUserName == null;
         }
 
-
-        //// TODO Items: ////
-        
-        // TODO: Allow any of the CRUD operations to occur here
         internal static void RunEmployeeQueries(Employee employee, string crudOperation)
         {
             switch(crudOperation)
@@ -212,8 +208,6 @@ namespace HumaneSociety
             }
             db.SubmitChanges();
         }
-
-        // TODO: Animal CRUD Operations
         internal static void AddAnimal(Animal animal)
         {
             db.Animals.InsertOnSubmit(animal);
@@ -298,8 +292,7 @@ namespace HumaneSociety
             }
             db.SubmitChanges();
         }
-        
-        // TODO: Animal Multi-Trait Search
+
         internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
         {
             IQueryable<Animal> animals = db.Animals.Select(a => a);
@@ -338,7 +331,6 @@ namespace HumaneSociety
             return animals;
         }
 
-        // TODO: Misc Animal Things
         internal static int GetCategoryId(string categoryName)
         {
             var categoryConnectId = db.Categories.Where(e => e.Name == categoryName).Single();
@@ -380,7 +372,8 @@ namespace HumaneSociety
             }
         }
 
-        // TODO: Adoption CRUD Operations
+
+
         internal static void Adopt(Animal animal, Client client)
         {
             Adoption adoption = new Adoption();
