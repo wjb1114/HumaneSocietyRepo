@@ -57,9 +57,16 @@ namespace HumaneSociety
                 newAddress.AddressLine1 = streetAddress;
                 newAddress.City = null;
                 newAddress.USStateId = stateId;
-                newAddress.Zipcode = zipCode;                
+                newAddress.Zipcode = zipCode;
 
-                db.Addresses.InsertOnSubmit(newAddress);
+                try
+                {
+                    db.Addresses.InsertOnSubmit(newAddress);
+                }
+                catch
+                {
+                    Console.WriteLine("Unable to access database.");
+                }
                 SubmitChanges();
 
                 addressFromDb = newAddress;
@@ -67,8 +74,14 @@ namespace HumaneSociety
 
             // attach AddressId to clientFromDb.AddressId
             newClient.AddressId = addressFromDb.AddressId;
-
-            db.Clients.InsertOnSubmit(newClient);
+            try
+            {
+                db.Clients.InsertOnSubmit(newClient);
+            }
+            catch
+            {
+                Console.WriteLine("Unable to access database.");
+            }
 
             SubmitChanges();
         }
@@ -109,9 +122,17 @@ namespace HumaneSociety
                 newAddress.AddressLine1 = clientAddress.AddressLine1;
                 newAddress.City = null;
                 newAddress.USStateId = clientAddress.USStateId;
-                newAddress.Zipcode = clientAddress.Zipcode;                
+                newAddress.Zipcode = clientAddress.Zipcode;
 
-                db.Addresses.InsertOnSubmit(newAddress);
+                try
+                {
+                    db.Addresses.InsertOnSubmit(newAddress);
+                }
+                catch
+                {
+                    Console.WriteLine("Unable to access database.");
+                }
+
                 SubmitChanges();
 
                 updatedAddress = newAddress;
@@ -183,7 +204,14 @@ namespace HumaneSociety
         }
         internal static void RunEmployeeQueriesAdd(Employee employee)
         {
-            db.Employees.InsertOnSubmit(employee);
+            try
+            {
+                db.Employees.InsertOnSubmit(employee);
+            }
+            catch
+            {
+                Console.WriteLine("Unable to access database.");
+            }
         }
         internal static void RunEmployeeQueriesRead(Employee employee)
         {
@@ -224,7 +252,14 @@ namespace HumaneSociety
         internal static void RunEmployeeQueriesDelete(Employee employee)
         {
             Employee FoundEmployeeDelete = db.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).Where(e => e.Email == employee.Email).Where(e => e.FirstName == employee.FirstName).Where(e => e.LastName == employee.LastName).FirstOrDefault();
-            db.Employees.DeleteOnSubmit(FoundEmployeeDelete);
+            try
+            {
+                db.Employees.DeleteOnSubmit(FoundEmployeeDelete);
+            }
+            catch
+            {
+                Console.WriteLine("Unable to access database.");
+            }
             var changedAnimals = db.Animals.Where(a => a.EmployeeId == FoundEmployeeDelete.EmployeeId);
             foreach (Animal animal in changedAnimals)
             {
@@ -234,7 +269,14 @@ namespace HumaneSociety
 
         internal static void AddAnimal(Animal animal)
         {
-            db.Animals.InsertOnSubmit(animal);
+            try
+            {
+                db.Animals.InsertOnSubmit(animal);
+            }
+            catch
+            {
+                Console.WriteLine("Unable to access database.");
+            }
             SubmitChanges();
         }
 
@@ -308,7 +350,14 @@ namespace HumaneSociety
 
         internal static void RemoveAnimal(Animal animal)
         {
-            db.Animals.DeleteOnSubmit(animal);
+            try
+            {
+                db.Animals.DeleteOnSubmit(animal);
+            }
+            catch
+            {
+                Console.WriteLine("Unable to access database.");
+            }
             var rooms = db.Rooms.Where(a => a.AnimalId == animal.AnimalId);
             foreach (Room room in rooms)
             {
@@ -405,7 +454,14 @@ namespace HumaneSociety
             adoption.ApprovalStatus = "Pending";
             adoption.AdoptionFee = 75;
             adoption.PaymentCollected = true;
-            db.Adoptions.InsertOnSubmit(adoption);
+            try
+            {
+                db.Adoptions.InsertOnSubmit(adoption);
+            }
+            catch
+            {
+                Console.WriteLine("Unable to access database.");
+            }
             SubmitChanges();
         }
 
@@ -442,7 +498,14 @@ namespace HumaneSociety
         internal static void RemoveAdoption(int animalId, int clientId)
         {
             var adoption = db.Adoptions.Where(a => a.AnimalId == animalId).Where(a => a.ClientId == clientId).FirstOrDefault();
-            db.Adoptions.DeleteOnSubmit(adoption);
+            try
+            {
+                db.Adoptions.DeleteOnSubmit(adoption);
+            }
+            catch
+            {
+                Console.WriteLine("Unable to access database.");
+            }
             SubmitChanges();
         }
 
