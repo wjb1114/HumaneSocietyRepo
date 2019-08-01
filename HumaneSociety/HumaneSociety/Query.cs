@@ -239,7 +239,14 @@ namespace HumaneSociety
             }
             if (updates.ContainsKey(3))
             {
-                foundAnimal.Age = Convert.ToInt32(updates[3]);
+                try
+                {
+                    foundAnimal.Age = Convert.ToInt32(updates[3]);
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid input, ignoring Age input.");
+                }
             }
             if (updates.ContainsKey(4))
             {
@@ -247,15 +254,36 @@ namespace HumaneSociety
             }
             if (updates.ContainsKey(5))
             {
-                foundAnimal.KidFriendly = Convert.ToBoolean(updates[5]);
+                try
+                {
+                    foundAnimal.KidFriendly = Convert.ToBoolean(updates[5]);
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid input, ignoring Kid Friendly input.");
+                }
             }
             if (updates.ContainsKey(6))
             {
-                foundAnimal.PetFriendly = Convert.ToBoolean(updates[6]);
+                try
+                {
+                    foundAnimal.PetFriendly = Convert.ToBoolean(updates[6]);
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid input, ignoring Pet Friendly input.");
+                }
             }
             if (updates.ContainsKey(7))
             {
-                foundAnimal.Weight = Convert.ToInt32(updates[7]);
+                try
+                {
+                    foundAnimal.Weight = Convert.ToInt32(updates[7]);
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid input, ignoring Weight input.");
+                }
             }
             db.SubmitChanges();
         }
