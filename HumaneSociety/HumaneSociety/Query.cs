@@ -413,85 +413,60 @@ namespace HumaneSociety
         {
             if (File.Exists(filePath))
             {
-                string line;
+                var lines = File.ReadAllLines(filePath).Select(x => x.Split(','));
 
-                StreamReader file = new StreamReader(filePath);
-                while ((line = file.ReadLine()) != null)
+                foreach (var data in lines)
                 {
-                    string[] currentLineItems = line.Split(',');
-                    // name, weight, age, demeanor, kidfriendly, petfriendly, gender, adoptionstatus, categoryid, dietplanid, employeeid
+                    for (int i = 0; i < data.Length; i++)
+                    {
+                        data[i] = data[i].Replace("\"", "").Trim();
+                    }
+
                     Animal currentAnimal = new Animal();
-                    currentAnimal.Name = currentLineItems[0].Replace("\"", "") ?? null;
-                    if(currentLineItems[1].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[1].Replace("\"", "")))
-                    {
-                        currentAnimal.Weight = null;
-                    }
-                    else
-                    {
-                        currentAnimal.Weight = Convert.ToInt32(currentLineItems[1]);
-                    }
-                    if (currentLineItems[2].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[2].Replace("\"", "")))
-                    {
-                        currentAnimal.Age = null;
-                    }
-                    else
-                    {
-                        currentAnimal.Age = Convert.ToInt32(currentLineItems[2]);
-                    }
-                    currentAnimal.Demeanor = currentLineItems[3].Replace("\"", "") ?? null;
-                    if (currentLineItems[4].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[4].Replace("\"", "")))
-                    {
-                        currentAnimal.KidFriendly = null;
-                    }
-                    else
-                    {
-                        currentAnimal.KidFriendly = (Convert.ToInt32(currentLineItems[4]) != 0);
-                    }
-                    if (currentLineItems[5].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[5].Replace("\"", "")))
-                    {
-                        currentAnimal.PetFriendly = null;
-                    }
-                    else
-                    {
-                        currentAnimal.PetFriendly = (Convert.ToInt32(currentLineItems[5]) != 0);
-                    }
-                    currentAnimal.Gender = currentLineItems[6].Replace("\"", "") ?? null;
-                    currentAnimal.AdoptionStatus = currentLineItems[7].Replace("\"", "") ?? null;
-                    if (currentLineItems[8].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[8].Replace("\"", "")))
-                    {
-                        currentAnimal.CategoryId = null;
-                    }
-                    else
-                    {
-                        currentAnimal.CategoryId = Convert.ToInt32(currentLineItems[8]);
-                    }
-                    if (currentLineItems[9].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[9].Replace("\"", "")))
-                    {
-                        currentAnimal.DietPlanId = null;
-                    }
-                    else
-                    {
-                        currentAnimal.DietPlanId = Convert.ToInt32(currentLineItems[9]);
-                    }
-                    if (currentLineItems[10].Replace("\"", "") == "null" || string.IsNullOrEmpty(currentLineItems[10].Replace("\"", "")))
-                    {
-                        currentAnimal.EmployeeId = null;
-                    }
-                    else
-                    {
-                        currentAnimal.EmployeeId = Convert.ToInt32(currentLineItems[10]);
-                    }
+                    currentAnimal.Name = data[0] ?? null;
+                    currentAnimal.Weight = data[1].ToNullableInt() ?? null;
+                    currentAnimal.Age = data[2].ToNullableInt() ?? null;
+                    currentAnimal.Demeanor = data[3] ?? null;
+                    currentAnimal.KidFriendly = data[4].ToNullableBool() ?? null;
+                    currentAnimal.PetFriendly = data[5].ToNullableBool() ?? null;
+                    currentAnimal.Gender = data[6] ?? null;
+                    currentAnimal.AdoptionStatus = data[7] ?? null;
+                    currentAnimal.CategoryId = data[8].ToNullableInt() ?? null;
+                    currentAnimal.DietPlanId = data[9].ToNullableInt() ?? null;
+                    currentAnimal.EmployeeId = data[10].ToNullableInt() ?? null;
                     AddAnimal(currentAnimal);
                 }
+            }
+            Console.WriteLine("Animals have been imported.");
+            Console.ReadKey();
+            Console.Clear();
+        }
 
-                file.Close();
-                Console.WriteLine("Animals have been imported.");
+        public static int? ToNullableInt(this string line)
+        {
+            int value;
+            if (int.TryParse(line, out value)) return value;
+            return null;
+        }
+
+        public static bool? ToNullableBool(this string line)
+        {
+            int? initialValue = line.ToNullableInt();
+            if (initialValue == null)
+            {
+                return null;
             }
             else
             {
-                Console.WriteLine("File does not exist.");
+                if (initialValue == 0)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
-            Console.ReadKey();
         }
     }
 }
