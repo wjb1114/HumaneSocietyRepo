@@ -60,7 +60,7 @@ namespace HumaneSociety
                 newAddress.Zipcode = zipCode;                
 
                 db.Addresses.InsertOnSubmit(newAddress);
-                db.SubmitChanges();
+                SubmitChanges();
 
                 addressFromDb = newAddress;
             }
@@ -70,7 +70,7 @@ namespace HumaneSociety
 
             db.Clients.InsertOnSubmit(newClient);
 
-            db.SubmitChanges();
+            SubmitChanges();
         }
 
         internal static void UpdateClient(Client clientWithUpdates)
@@ -112,7 +112,7 @@ namespace HumaneSociety
                 newAddress.Zipcode = clientAddress.Zipcode;                
 
                 db.Addresses.InsertOnSubmit(newAddress);
-                db.SubmitChanges();
+                SubmitChanges();
 
                 updatedAddress = newAddress;
             }
@@ -121,7 +121,7 @@ namespace HumaneSociety
             clientFromDb.AddressId = updatedAddress.AddressId;
             
             // submit changes
-            db.SubmitChanges();
+            SubmitChanges();
         }
         
         internal static void AddUsernameAndPassword(Employee employee)
@@ -131,7 +131,7 @@ namespace HumaneSociety
             employeeFromDb.UserName = employee.UserName;
             employeeFromDb.Password = employee.Password;
 
-            db.SubmitChanges();
+            SubmitChanges();
         }
 
         internal static Employee RetrieveEmployeeUser(string email, int employeeNumber)
@@ -179,7 +179,7 @@ namespace HumaneSociety
                     RunEmployeeQueriesDelete(employee);
                     break;
             }
-            db.SubmitChanges();
+            SubmitChanges();
         }
         internal static void RunEmployeeQueriesAdd(Employee employee)
         {
@@ -203,7 +203,14 @@ namespace HumaneSociety
 
             employee.FirstName = UserInterface.GetStringData("new first name", "the employee's");
             employee.LastName = UserInterface.GetStringData("new last name", "the employee's");
-            employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("new employee number", "the employee's"));
+            try
+            {
+                employee.EmployeeNumber = int.Parse(UserInterface.GetStringData("new employee number", "the employee's"));
+            }
+            catch
+            {
+                Console.WriteLine("Invalid input, ignoring employee number update.");
+            }
             employee.Email = UserInterface.GetStringData("new email", "the employee's");
             employee.UserName = UserInterface.GetStringData("new username", "the employee's");
             employee.Password = UserInterface.GetStringData("new password", "the employee's");
@@ -225,10 +232,10 @@ namespace HumaneSociety
             }
         }
 
-    internal static void AddAnimal(Animal animal)
+        internal static void AddAnimal(Animal animal)
         {
             db.Animals.InsertOnSubmit(animal);
-            db.SubmitChanges();
+            SubmitChanges();
         }
 
         internal static Animal GetAnimalByID(int id)
@@ -296,7 +303,7 @@ namespace HumaneSociety
                     Console.WriteLine("Invalid input, ignoring Weight input.");
                 }
             }
-            db.SubmitChanges();
+            SubmitChanges();
         }
 
         internal static void RemoveAnimal(Animal animal)
@@ -307,7 +314,7 @@ namespace HumaneSociety
             {
                 room.AnimalId = null;
             }
-            db.SubmitChanges();
+            SubmitChanges();
         }
 
         internal static IQueryable<Animal> SearchForAnimalsByMultipleTraits(Dictionary<int, string> updates) // parameter(s)?
@@ -350,21 +357,20 @@ namespace HumaneSociety
 
         internal static int GetCategoryId(string categoryName)
         {
-            var categoryConnectId = db.Categories.Where(e => e.Name == categoryName).Single();
-            var categoryFromDb = db.Animals.Where(e => e.CategoryId == categoryConnectId.CategoryId).FirstOrDefault();
-            if (categoryFromDb == null)
+            var categoryConnectId = db.Categories.Where(e => e.Name == categoryName).FirstOrDefault();
+            if (categoryConnectId == null)
             {
                 throw new NullReferenceException();
             }
             else
             {
-                return categoryFromDb.AnimalId;
+                return categoryConnectId.CategoryId;
             }
         }
 
         internal static Room GetRoom(int animalId)
         {
-            var roomConnectId = db.Rooms.Where(e => e.AnimalId == animalId).Single();
+            var roomConnectId = db.Rooms.Where(e => e.AnimalId == animalId).FirstOrDefault();
             if (roomConnectId == null)
             {
                 throw new NullReferenceException();
@@ -377,7 +383,7 @@ namespace HumaneSociety
 
         internal static int GetDietPlanId(string dietPlanName)
         {
-            var dietPlanConnectId = db.DietPlans.Where(e => e.Name == dietPlanName).Single();
+            var dietPlanConnectId = db.DietPlans.Where(e => e.Name == dietPlanName).FirstOrDefault();
             if (dietPlanConnectId == null)
             {
                 throw new NullReferenceException();
@@ -400,7 +406,7 @@ namespace HumaneSociety
             adoption.AdoptionFee = 75;
             adoption.PaymentCollected = true;
             db.Adoptions.InsertOnSubmit(adoption);
-            db.SubmitChanges();
+            SubmitChanges();
         }
 
         internal static IQueryable<Adoption> GetPendingAdoptions()
@@ -425,7 +431,7 @@ namespace HumaneSociety
                     adoption.ApprovalStatus = "Denied";
                     RemoveAdoption(adoption.AnimalId, adoption.ClientId);
                 }
-                db.SubmitChanges();
+                SubmitChanges();
             }
             else
             {
@@ -437,7 +443,7 @@ namespace HumaneSociety
         {
             var adoption = db.Adoptions.Where(a => a.AnimalId == animalId).Where(a => a.ClientId == clientId).FirstOrDefault();
             db.Adoptions.DeleteOnSubmit(adoption);
-            db.SubmitChanges();
+            SubmitChanges();
         }
 
         internal static IQueryable<AnimalShot> GetShots(Animal animal)
@@ -448,9 +454,9 @@ namespace HumaneSociety
 
         internal static void UpdateShot(string shotName, Animal animal)
         {
-            AnimalShot UpdateAnimalShot = db.AnimalShots.Where(e => e.AnimalId == animal.AnimalId).FirstOrDefault();
+            AnimalShot updateAnimalShot = db.AnimalShots.Where(e => e.AnimalId == animal.AnimalId).FirstOrDefault();
             var typeOfShot = db.Shots.Where(e => e.Name == shotName).FirstOrDefault();
-            UpdateAnimalShot.ShotId = typeOfShot.ShotId;
+            updateAnimalShot.ShotId = typeOfShot.ShotId;
 
         }
 
@@ -481,8 +487,13 @@ namespace HumaneSociety
                     currentAnimal.EmployeeId = data[10].ToNullableInt() ?? null;
                     AddAnimal(currentAnimal);
                 }
+                Console.WriteLine("Animals have been imported.");
             }
-            Console.WriteLine("Animals have been imported.");
+            else
+            {
+                Console.WriteLine("File does not exist!");
+            }
+            
             Console.ReadKey();
             Console.Clear();
         }
@@ -490,7 +501,10 @@ namespace HumaneSociety
         public static int? ToNullableInt(this string line)
         {
             int value;
-            if (int.TryParse(line, out value)) return value;
+            if (int.TryParse(line, out value))
+            {
+                return value;
+            }
             return null;
         }
 
@@ -513,5 +527,18 @@ namespace HumaneSociety
                 }
             }
         }
+
+        static void SubmitChanges()
+        {
+            try
+            {
+                db.SubmitChanges();
+            }
+            catch
+            {
+                Console.WriteLine("Unable to access database.");
+            }
+        }
+
     }
 }
